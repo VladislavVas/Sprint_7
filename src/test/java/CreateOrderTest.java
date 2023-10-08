@@ -15,25 +15,25 @@ public class CreateOrderTest extends BaseTest {
 
     private OrderDto orderDto;
 
-    public CreateOrderTest(OrderDto orderDto) {
-        this.orderDto = orderDto;
+    public CreateOrderTest(List colour) {
+        this.orderDto = new OrderDto("Naruto", "Uchiha", "Konoha, 142 apt.", 4, "+7 800 355 35 35", 5, "2020-06-06", "Saske, come back to Konoha", null);
+        orderDto.setColor(colour);
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Test data. Colour of a scooter: {0} {1} {2} {3}")
     public static Object[][] getTestData() {
         return new Object[][]{
-                {new OrderDto("Naruto", "Uchiha", "Konoha, 142 apt.", 4, "+7 800 355 35 35", 5, "2020-06-06", "Saske, come back to Konoha", List.of("BLACK", "GRAY"))},
-                {new OrderDto("Naruto", "Uchiha", "Konoha, 142 apt.", 4, "+7 800 355 35 35", 5, "2020-06-06", "Saske, come back to Konoha", List.of("BLACK"))},
-                {new OrderDto("Naruto", "Uchiha", "Konoha, 142 apt.", 4, "+7 800 355 35 35", 5, "2020-06-06", "Saske, come back to Konoha", List.of("GRAY"))},
-                {new OrderDto("Naruto", "Uchiha", "Konoha, 142 apt.", 4, "+7 800 355 35 35", 5, "2020-06-06", "Saske, come back to Konoha", List.of())}
+                {List.of("BLACK", "GRAY")},
+                {List.of("BLACK")},
+                {List.of("GRAY")},
+                {List.of()}
         };
     }
-
 
     @Test
     @DisplayName("Create a new order")
     @Description("Successful creation of a new order. Expected response code 201.")
-    public void createNewCourierTest() {
+    public void createNewOrderTest() {
         var response = orderHttpClient.createOrder(orderDto);
         response.statusCode(201).and().assertThat().body("track", notNullValue());
         TrackDto trackDto = response.extract().as(TrackDto.class);
